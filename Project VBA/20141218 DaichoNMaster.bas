@@ -106,18 +106,19 @@ Set RngOld = OldNum.Offset(0, 13)
 i = 1
 
 Do Until i = RowCount
-If OldNum.Cells(i).Value = NewNum.Cells(i).Value Then
-RngOld.Cells(i).Value = "-"
-i = i + 1
-Else
-If NewNum.Cells(i).Value = "" Then
-i = i + 1
+    If OldNum.Cells(i).Value = NewNum.Cells(i).Value Then
+    RngOld.Cells(i).Value = "番号変更X"
+    i = i + 1
+    Else
+        If NewNum.Cells(i).Value = "" Then
+        RngOld.Cells(i).Value = "車両台帳データX"
+        i = i + 1
 
-Else
-RngOld.Cells(i).Value = OldNum.Cells(i).Value
-OldNum.Cells(i).Value = NewNum.Cells(i).Value
-i = i + 1
-End If
-End If
+        Else
+        RngOld.Cells(i).Value = OldNum.Cells(i).Value
+        RngOld.Cells(i).Offset(0, 1).Value = NewNum.Cells(i).Value
+        i = i + 1
+        End If
+    End If
 Loop
 End Sub
