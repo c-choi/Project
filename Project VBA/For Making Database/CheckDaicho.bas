@@ -1,5 +1,7 @@
 Attribute VB_Name = "CheckDaicho"
 Sub checkdaicho()
+''' after adding Daicho data to Master File, compared ptnum and bodynum between two sheets and colored data
+
 Dim LPlateNum As Range, LBodyNum As Range
 Dim DPlateNum As Range, DBodynum As Range
 Dim iNum As String, jnum As String

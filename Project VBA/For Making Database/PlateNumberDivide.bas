@@ -1,5 +1,6 @@
 Attribute VB_Name = "PlateNumberDivide"
 Sub PlateNumberDivide()
+''' for dividing Plate number copied from Daicho into Words and Numbers
 
 Dim PtNum As Range
 Dim FrnNum As Range
