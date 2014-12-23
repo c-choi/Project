@@ -5,7 +5,7 @@ Sub copyPaste()
 Dim RngOld As Range, RngNew As Range
 Dim BodyNum As Range
 Dim BodyCount As Integer
-Dim Master As Worksheet
+Dim master As Worksheet
 Dim DaiCho As Workbook
 Dim DaiChoSheet As Worksheet
 Dim DaiChoCount As Integer
@@ -14,7 +14,7 @@ Dim RngDaicho As Range
 Dim i As Integer
 Dim k As Integer
 Dim j As Integer
-Set Master = ThisWorkbook.Sheets(1)
+Set master = ThisWorkbook.Sheets(1)
 
 Set DaiCho = Workbooks("é‘óºë‰í†Å@ëSëÃ.xlsx")
 DaiChoCount = DaiCho.Sheets.Count
@@ -22,11 +22,11 @@ i = 1
 k = 1
 j = 1
 Application.ScreenUpdating = False
-Master.Activate
-Set RngOld = Master.Range(Range("e2"), Range("e2").End(xlDown))
-Set BodyNum = Master.Range(Range("j2"), Range("j2").End(xlDown))
+master.Activate
+Set RngOld = master.Range(Range("e2"), Range("e2").End(xlDown))
+Set BodyNum = master.Range(Range("j2"), Range("j2").End(xlDown))
 BodyCount = BodyNum.Count
-Set RngNew = Master.Range(Range("a2"), Range("a2").Offset(BodyCount, 0))
+Set RngNew = master.Range(Range("a2"), Range("a2").Offset(BodyCount, 0))
 
 DaiCho.Activate
 Set DaiChoSheet = DaiCho.Sheets(k)
@@ -41,7 +41,7 @@ Set RngDaicho = DaiChoSheet.Range("f7")
 
 End If
 
-Master.Activate
+master.Activate
 
 Do While BodyNum.Cells(j).Value <> ""
 
@@ -99,7 +99,7 @@ Do While BodyNum.Cells(j).Value <> ""
 Loop
 
 Application.ScreenUpdating = True
-Master.Activate
+master.Activate
 End Sub
 
 
