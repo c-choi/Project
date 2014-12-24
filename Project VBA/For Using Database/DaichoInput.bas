@@ -21,7 +21,7 @@ Filename = Application.GetOpenFilename
     If Filename = False Then
     Exit Sub
 Else
-Workbooks.Open (Filename)
+Workbooks.Open Filename:=Filename, ReadOnly:=True
 End If
 Else
 Master.Sheets(1).Activate
