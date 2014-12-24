@@ -145,8 +145,7 @@ DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"),
 Set DRowEnd = DRowEnd.Offset(1, 0)
 
 ElseIf InStr(MbodyNum.Cells(j).Offset(0, 11).Value, sheetN) Then
-If InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ダンプ") _
-Or InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ホイ-ルクレ-ン") Then
+If InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ダンプ") Then
 Set DumpRng = SheetD.UsedRange.Find(what:=MbodyNum.Cells(j), lookat:=xlWhole)
 MbodyNum.Cells(j).Offset(0, -4).Copy
 DRowEnd.Offset(0, 1).PasteSpecial xlPasteValues
@@ -171,24 +170,33 @@ SheetD.Activate
 DumpRng.Value = Application.WorksheetFunction.CountA(DumpRng, Range(Range("a7"), Range("a7").End(xlDown))) + 1
 Set DRowEndD = DRowEndD.Offset(1, 0)
 
-Else
 
+ElseIf MbodyNum.Cells(j).Offset(0, 11).Value = "ホイ-ルクレ-ン" Then
+Set DumpRng = SheetD.UsedRange.Find(what:=MbodyNum.Cells(j), lookat:=xlWhole)
 MbodyNum.Cells(j).Offset(0, -4).Copy
 DRowEnd.Offset(0, 1).PasteSpecial xlPasteValues
+SheetD.Activate
+DumpRng.Offset(0, -4).PasteSpecial xlPasteValues
 Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
 DRowEnd.Offset(0, 2).PasteSpecial xlPasteAll
-Master.Sheets(1).Activate
+DumpRng.Offset(0, -3).PasteSpecial xlPasteAll
 Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
 DRowEnd.Offset(0, 7).PasteSpecial xlPasteAll
+DumpRng.Offset(0, 2).PasteSpecial xlPasteAll
 MbodyNum.Cells(j).Offset(0, 8).Copy
 DRowEnd.Offset(0, 6).PasteSpecial xlPasteAll
+DumpRng.Offset(0, 1).PasteSpecial xlPasteAll
 Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
 DRowEnd.Offset(0, 9).PasteSpecial xlPasteAll
+DumpRng.Offset(0, 4).PasteSpecial xlPasteAll
 Daicho.Sheets(i).Activate
 DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
 Set DRowEnd = DRowEnd.Offset(1, 0)
-
+SheetD.Activate
+DumpRng.Value = Application.WorksheetFunction.CountA(DumpRng, Range(Range("a7"), Range("a7").End(xlDown))) + 1
+Set DRowEndD = DRowEndD.Offset(1, 0)
 End If
+
 End If
 j = j + 1
 

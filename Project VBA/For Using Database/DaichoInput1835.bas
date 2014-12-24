@@ -144,9 +144,10 @@ Daicho.Sheets(i).Activate
 DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
 Set DRowEnd = DRowEnd.Offset(1, 0)
 
-ElseIf InStr(MbodyNum.Cells(j).Offset(0, 11).Value, sheetN) Then
+Else
+If InStr(MbodyNum.Cells(j).Offset(0, 11).Value, sheetN) Then
 If InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ダンプ") _
-Or InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ホイ-ルクレ-ン") Then
+Or MbodyNum.Cells(j).Offset(0, 11).Value = "ホイ-ルクレ-ン" Then
 Set DumpRng = SheetD.UsedRange.Find(what:=MbodyNum.Cells(j), lookat:=xlWhole)
 MbodyNum.Cells(j).Offset(0, -4).Copy
 DRowEnd.Offset(0, 1).PasteSpecial xlPasteValues
@@ -189,6 +190,7 @@ DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"),
 Set DRowEnd = DRowEnd.Offset(1, 0)
 
 End If
+
 End If
 j = j + 1
 
@@ -243,7 +245,7 @@ With Selection.Borders(xlEdgeLeft)
     End With
 Range(Selection.End(xlDown).Offset(1, 0), Selection.End(xlDown).Offset(1, 10)).Select
 Selection.ClearFormats
-Range("d3").Value = Range("a7").End(xlDown).Value & "台"
+''''Range("d3").Value = Range("a7").End(xlDown).Value & "台"
 Range("a7").Activate
 Next k
 End If

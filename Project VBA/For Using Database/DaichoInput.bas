@@ -185,6 +185,7 @@ With Selection.Borders(xlEdgeLeft)
     End With
 Range(Selection.End(xlDown).Offset(1, 0), Selection.End(xlDown).Offset(1, 10)).Select
 Selection.ClearFormats
+Range("d3").Value = Range("a7").End(xlDown).Value & "‘ä"
 Range("a7").Activate
 Next k
 Application.ScreenUpdating = True
