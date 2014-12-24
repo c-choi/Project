@@ -3,7 +3,7 @@ Sub DaichoInput()
 
 Dim Daicho As Workbook
 Dim DbodyC As Integer
-Dim DRowEnd As Range
+Dim DRowEnd As Range, DRowEndD As Range
 Dim MbodyNum As Range
 Dim SheetC As Integer
 Dim sheetN As String
@@ -48,8 +48,8 @@ Do While j < MbodyNum.Count
 
 If MbodyNum.Cells(j).Offset(0, 11) = sheetN Then
 MbodyNum.Cells(j).Offset(0, -4).Copy
-DRowEnd.Offset(0, 1).PasteSpecial xlPasteValues
 Daicho.Sheets(i).Activate
+DRowEnd.Offset(0, 1).PasteSpecial xlPasteValues
 Range(DRowEnd, DRowEnd.Offset(0, 1)).Select
 Selection.Borders(xlDiagonalDown).LineStyle = xlNone
     Selection.Borders(xlDiagonalUp).LineStyle = xlNone
@@ -97,12 +97,12 @@ Daicho.Sheets(i).Activate
 DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
 Set DRowEnd = DRowEnd.Offset(1, 0)
 
-ElseIf MbodyNum.Cells(j).Offset(0, 11) Like "[*ダンプ*]" Then
+ElseIf MbodyNum.Cells(j).Offset(0, 11) = "*ダンプ*" Then
 MbodyNum.Cells(j).Offset(0, -4).Copy
 SheetD.Activate
-Set DRowEnd = Range("a7")
-DRowEnd.Offset(0, 1).PasteSpecial xlPasteValues
-Range(DRowEnd, DRowEnd.Offset(0, 1)).Select
+Set DRowEndD = Range("a7")
+DRowEndD.Offset(0, 1).PasteSpecial xlPasteValues
+Range(DRowEndD, DRowEndD.Offset(0, 1)).Select
 Selection.Borders(xlDiagonalDown).LineStyle = xlNone
     Selection.Borders(xlDiagonalUp).LineStyle = xlNone
     With Selection.Borders(xlEdgeLeft)
@@ -137,17 +137,17 @@ Selection.Borders(xlDiagonalDown).LineStyle = xlNone
     End With
     Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
 Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
-DRowEnd.Offset(0, 2).PasteSpecial xlPasteAll
+DRowEndD.Offset(0, 2).PasteSpecial xlPasteAll
 Master.Sheets(1).Activate
 Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
-DRowEnd.Offset(0, 7).PasteSpecial xlPasteAll
+DRowEndD.Offset(0, 7).PasteSpecial xlPasteAll
 MbodyNum.Cells(j).Offset(0, 8).Copy
-DRowEnd.Offset(0, 6).PasteSpecial xlPasteAll
+DRowEndD.Offset(0, 6).PasteSpecial xlPasteAll
 Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
-DRowEnd.Offset(0, 9).PasteSpecial xlPasteAll
+DRowEndD.Offset(0, 9).PasteSpecial xlPasteAll
 SheetD.Activate
-DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
-Set DRowEnd = DRowEnd.Offset(1, 0)
+DRowEndD.Value = Application.WorksheetFunction.CountA(DRowEndD, Range(Range("a7"), Range("a7").End(xlDown))) + 1
+Set DRowEndD = DRowEndD.Offset(1, 0)
 
 End If
 j = j + 1

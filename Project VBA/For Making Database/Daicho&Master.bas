@@ -138,3 +138,99 @@ Do Until i = RowCount
 Loop
 End Sub
 
+Sub Area()
+''Location Info Only
+Dim RngOld As Range, RngNew As Range
+Dim BodyNum As Range, LocName As Range
+Dim BodyCount As Integer
+Dim master As Worksheet
+Dim DaiCho As Workbook
+Dim DaiChoSheet As Worksheet
+Dim DaiChoCount As Integer
+Dim CarNum As Integer
+Dim RngDaicho As Range
+Dim i As Integer
+Dim k As Integer
+Dim j As Integer
+
+Set master = ThisWorkbook.Sheets(1)
+
+Set DaiCho = Workbooks("é‘óºë‰í†Å@ëSëÃ.xlsx")
+DaiChoCount = DaiCho.Sheets.Count
+i = 1
+k = 1
+j = 1
+Application.ScreenUpdating = False
+master.Activate
+Set BodyNum = master.Range(Range("h2"), Range("h2").End(xlDown))
+BodyCount = BodyNum.Count
+
+
+DaiCho.Activate
+Set DaiChoSheet = DaiCho.Sheets(k)
+DaiChoSheet.Activate
+
+If DaiChoSheet.Range("f8").Value <> "" Then
+Set RngDaicho = DaiChoSheet.Range(Range("f7"), Range("f7").End(xlDown).Offset(1, 0))
+CarNum = RngDaicho.Count
+
+Else
+Set RngDaicho = DaiChoSheet.Range("f7")
+
+End If
+
+master.Activate
+
+Do While BodyNum.Cells(j).Value <> ""
+
+    Do Until k = DaiChoCount
+        Set DaiChoSheet = DaiCho.Sheets(k)
+        DaiChoSheet.Activate
+        
+        Do Until i = CarNum
+            
+            If BodyNum.Cells(j).Value = RngDaicho.Cells(i).Value Then
+            Set LocName = BodyNum.Offset(0, 1)
+            LocName.Cells(j).Value = DaiChoSheet.Name
+            i = 1
+            DaiCho.Activate
+            k = 1
+            Set DaiChoSheet = DaiCho.Sheets(k)
+
+                If DaiChoSheet.Range("f8").Value <> "" Then
+                DaiChoSheet.Activate
+                Set RngDaicho = DaiChoSheet.Range(Range("f7"), Range("f7").End(xlDown).Offset(1, 0))
+                CarNum = RngDaicho.Count
+
+                Else
+                Set RngDaicho = DaiChoSheet.Range("f7")
+                End If
+            j = j + 1
+
+            Else
+            i = i + 1
+            End If
+
+            Loop
+        i = 1
+        k = k + 1
+        DaiCho.Activate
+        Set DaiChoSheet = DaiCho.Sheets(k)
+        DaiChoSheet.Activate
+
+            If DaiChoSheet.Range("f8").Value <> "" Then
+            Set RngDaicho = DaiChoSheet.Range(Range("f7"), Range("f7").End(xlDown).Offset(1, 0))
+            CarNum = RngDaicho.Count
+
+            Else
+            Set RngDaicho = DaiChoSheet.Range("f7")
+            End If
+
+        Loop
+        k = 1
+        j = j + 1
+Loop
+
+Application.ScreenUpdating = True
+master.Activate
+End Sub
