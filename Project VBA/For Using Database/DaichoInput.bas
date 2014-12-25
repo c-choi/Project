@@ -13,11 +13,14 @@ Dim SheetD As Worksheet
 Dim CountDumpW As Range, CountDumpS As Range, countdumpF As Range
 Dim strAddW As String, strAddS As String, strAddF As String
 Dim DumpRng As Range
+Dim strFP As String
 
-
+strFP = ThisWorkbook.Path
 dateT = Format(Now, YYYY - MM - DD)
+
 Set Daicho = ThisWorkbook
 Application.DisplayAlerts = False
+Application.ScreenUpdating = False
 On Error Resume Next
 Set Master = Workbooks("ワイズ・セブンマスタファイル.xlsm")
  If Err.Number <> 0 Then
@@ -26,13 +29,13 @@ Filename = Application.GetOpenFilename
     Exit Sub
 Else
 Workbooks.Open Filename:=Filename, ReadOnly:=True
+DaichoInput
 End If
 Else
 Master.Sheets(1).Activate
 Set MbodyNum = Range(Range("h2"), Range("h2").End(xlDown))
-Application.ScreenUpdating = False
 Daicho.Activate
-i = 1
+I = 1
 j = 1
 
 SheetC = Sheets.Count
@@ -115,9 +118,9 @@ Range(Range("a6"), Range("a6").End(xlToRight)).Copy
 
 
 
-Do Until i = SheetC
+Do Until I = SheetC
 Daicho.Activate
-Sheets(i).Activate
+Sheets(I).Activate
 sheetN = ActiveSheet.Name
 Range("a7").Activate
 Set DRowEnd = ActiveCell
@@ -140,7 +143,7 @@ MbodyNum.Cells(j).Offset(0, 8).Copy
 DRowEnd.Offset(0, 6).PasteSpecial xlPasteAll
 Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
 DRowEnd.Offset(0, 9).PasteSpecial xlPasteAll
-Daicho.Sheets(i).Activate
+Daicho.Sheets(I).Activate
 DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
 Set DRowEnd = DRowEnd.Offset(1, 0)
 
@@ -164,7 +167,7 @@ DumpRng.Offset(0, 1).PasteSpecial xlPasteAll
 Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
 DRowEnd.Offset(0, 9).PasteSpecial xlPasteAll
 DumpRng.Offset(0, 4).PasteSpecial xlPasteAll
-Daicho.Sheets(i).Activate
+Daicho.Sheets(I).Activate
 DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
 Set DRowEnd = DRowEnd.Offset(1, 0)
 SheetD.Activate
@@ -182,7 +185,7 @@ MbodyNum.Cells(j).Offset(0, 8).Copy
 DRowEnd.Offset(0, 6).PasteSpecial xlPasteAll
 Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
 DRowEnd.Offset(0, 9).PasteSpecial xlPasteAll
-Daicho.Sheets(i).Activate
+Daicho.Sheets(I).Activate
 DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
 Set DRowEnd = DRowEnd.Offset(1, 0)
 End If
@@ -229,7 +232,7 @@ j = j + 1
 
 Loop
 
-i = i + 1
+I = I + 1
 
 Loop
 
@@ -343,9 +346,10 @@ Range("a7").Activate
 Next k
 
 End If
+Master.Close False
 Application.ScreenUpdating = True
 Daicho.Sheets(1).Activate
-'''ThisWorkbook.SaveCopyAs (Replace(dateT, "/", "") & "車両台帳 全体.xlsm")
+ThisWorkbook.SaveCopyAs (strFP & "/autosave/" & Replace(dateT, "/", "") & " 車両台帳 全体.xlsm")
 
 
 End Sub
