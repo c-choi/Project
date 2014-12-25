@@ -276,13 +276,66 @@ With Selection.Borders(xlEdgeLeft)
         .TintAndShade = 0
         .Weight = xlThin
     End With
+
+ActiveSheet.Sort.SortFields.Clear
+   ActiveSheet.Sort.SortFields.Add Key:=Range(Range("F7"), Range("f7").End(xlDown)), _
+        SortOn:=xlSortOnCellColor, Order:=xlAscending, DataOption:=xlSortNormal
+    With ActiveSheet.Sort
+        .SetRange Range(Range("b7"), Range("b7").End(xlDown).Offset(0, 9))
+        .Header = xlGuess
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+
 Range(Selection.End(xlDown).Offset(1, 0), Selection.End(xlDown).Offset(1, 10)).Select
 Selection.ClearFormats
 
 If ActiveSheet.Name = SheetD.Name Then
-Range("a7").Select
 Range("d3").Value = Application.WorksheetFunction.Count(Columns(1)) & "‘ä"
-
+Range("a7").Select
+Selection.End(xlDown).End(xlDown).Select
+Do Until Selection.Value = ""
+Range(Selection, Selection.End(xlDown).Offset(0, 10)).Select
+With Selection.Borders(xlEdgeLeft)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeRight)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideVertical)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideHorizontal)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+Selection.End(xlDown).End(xlDown).Select
+Loop
 Else
 Range("d3").Value = Range("a7").End(xlDown).Value & "‘ä"
 End If
