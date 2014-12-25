@@ -145,8 +145,8 @@ DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"),
 Set DRowEnd = DRowEnd.Offset(1, 0)
 
 ElseIf InStr(MbodyNum.Cells(j).Offset(0, 11).Value, sheetN) Then
-If InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ダンプ") _
-Or InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ホイ-ルクレ-ン") Then
+If InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ダンプ") Or _
+MbodyNum.Cells(j).Offset(0, 11).Value = "ホイ-ルクレ-ン" Then
 Set DumpRng = SheetD.UsedRange.Find(what:=MbodyNum.Cells(j), lookat:=xlWhole)
 MbodyNum.Cells(j).Offset(0, -4).Copy
 DRowEnd.Offset(0, 1).PasteSpecial xlPasteValues
@@ -168,16 +168,14 @@ Daicho.Sheets(i).Activate
 DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
 Set DRowEnd = DRowEnd.Offset(1, 0)
 SheetD.Activate
-DumpRng.Value = Application.WorksheetFunction.CountA(DumpRng, Range(Range("a7"), Range("a7").End(xlDown))) + 1
+DumpRng.Offset(0, -5).Value = Application.WorksheetFunction.CountA(Range(DumpRng.End(xlUp).Offset(1, 0), DumpRng))
 Set DRowEndD = DRowEndD.Offset(1, 0)
 
 Else
-
 MbodyNum.Cells(j).Offset(0, -4).Copy
 DRowEnd.Offset(0, 1).PasteSpecial xlPasteValues
 Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
 DRowEnd.Offset(0, 2).PasteSpecial xlPasteAll
-Master.Sheets(1).Activate
 Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
 DRowEnd.Offset(0, 7).PasteSpecial xlPasteAll
 MbodyNum.Cells(j).Offset(0, 8).Copy
@@ -187,9 +185,46 @@ DRowEnd.Offset(0, 9).PasteSpecial xlPasteAll
 Daicho.Sheets(i).Activate
 DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
 Set DRowEnd = DRowEnd.Offset(1, 0)
+End If
 
+ElseIf InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ダンプ") Or _
+MbodyNum.Cells(j).Offset(0, 11).Value = "ホイ-ルクレ-ン" Then
+Set DumpRng = SheetD.UsedRange.Find(what:=MbodyNum.Cells(j), lookat:=xlWhole)
+MbodyNum.Cells(j).Offset(0, -4).Copy
+SheetD.Activate
+DumpRng.Offset(0, -4).PasteSpecial xlPasteValues
+Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
+DumpRng.Offset(0, -3).PasteSpecial xlPasteAll
+Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
+DumpRng.Offset(0, 2).PasteSpecial xlPasteAll
+MbodyNum.Cells(j).Offset(0, 8).Copy
+DumpRng.Offset(0, 1).PasteSpecial xlPasteAll
+Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
+DumpRng.Offset(0, 4).PasteSpecial xlPasteAll
+SheetD.Activate
+DumpRng.Offset(0, -5).Value = Application.WorksheetFunction.CountA(Range(DumpRng.End(xlUp).Offset(1, 0), DumpRng))
+Set DRowEndD = DRowEndD.Offset(1, 0)
+
+ElseIf InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ダンプ") Or _
+MbodyNum.Cells(j).Offset(0, 11).Value = "ホイ-ルクレ-ン" Then
+Set DumpRng = SheetD.UsedRange.Find(what:=MbodyNum.Cells(j), lookat:=xlWhole)
+MbodyNum.Cells(j).Offset(0, -4).Copy
+SheetD.Activate
+DumpRng.Offset(0, -4).PasteSpecial xlPasteValues
+Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
+DumpRng.Offset(0, -3).PasteSpecial xlPasteAll
+Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
+DumpRng.Offset(0, 2).PasteSpecial xlPasteAll
+MbodyNum.Cells(j).Offset(0, 8).Copy
+DumpRng.Offset(0, 1).PasteSpecial xlPasteAll
+Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
+DumpRng.Offset(0, 4).PasteSpecial xlPasteAll
+SheetD.Activate
+DumpRng.Offset(0, -5).Value = Application.WorksheetFunction.CountA(Range(DumpRng.End(xlUp).Offset(1, 0), DumpRng))
+Set DRowEndD = DRowEndD.Offset(1, 0)
 End If
-End If
+
+
 j = j + 1
 
 Loop
@@ -202,7 +237,7 @@ Loop
 Daicho.Activate
 
 k = 1
-For k = 1 To SheetC + 1
+For k = 1 To SheetC
 ThisWorkbook.Sheets(k).Activate
 Range(Range("a7"), Range("a7").End(xlDown).Offset(0, 10)).Select
 With Selection.Borders(xlEdgeLeft)
@@ -243,9 +278,15 @@ With Selection.Borders(xlEdgeLeft)
     End With
 Range(Selection.End(xlDown).Offset(1, 0), Selection.End(xlDown).Offset(1, 10)).Select
 Selection.ClearFormats
+If SheetD Then
+Range(Range("a7").End(xlDown).End(xlDown).Offset(1, 0), Range("a7").End(xlDown).End(xlDown).Offset(1, 0).End(xlDown)).Select
+
+Else
 Range("d3").Value = Range("a7").End(xlDown).Value & "台"
+End If
 Range("a7").Activate
 Next k
+
 End If
 Application.ScreenUpdating = True
 Daicho.Sheets(1).Activate
