@@ -236,7 +236,7 @@ End If
 Master.Close False
 Application.ScreenUpdating = True
 SyaYo.Sheets(1).Activate
-ThisWorkbook.SaveCopyAs (strFP & "/autosave/" & Replace(dateT, "/", "") & " 車両台帳 全体.xlsm")
+ThisWorkbook.SaveCopyAs (strFP & "/autosave/" & Replace(dateT, "/", "") & " ワイズ本社　社用車一覧.xlsm")
 
 
 End Sub
