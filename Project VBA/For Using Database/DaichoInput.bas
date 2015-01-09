@@ -23,327 +23,364 @@ Application.DisplayAlerts = False
 Application.ScreenUpdating = False
 On Error Resume Next
 Set Master = Workbooks("ワイズ・セブンマスタファイル.xlsm")
- If Err.Number <> 0 Then
-Filename = Application.GetOpenFilename
+If Err.Number <> 0 Then
+    Filename = Application.GetOpenFilename
     If Filename = False Then
-    Exit Sub
+        Exit Sub
+    Else
+        Workbooks.Open Filename:=Filename, ReadOnly:=True
+        DaichoInput
+    End If
 Else
-Workbooks.Open Filename:=Filename, ReadOnly:=True
-DaichoInput
-End If
-Else
-Master.Sheets(1).Activate
-Set MbodyNum = Range(Range("h2"), Range("h2").End(xlDown))
-Daicho.Activate
-I = 1
-j = 1
+    Master.Sheets(1).Activate
+    Set MbodyNum = Range(Range("h2"), Range("h2").End(xlDown))
+    Daicho.Activate
+    I = 1
+    j = 1
 
-SheetC = Sheets.Count
-Set SheetD = Daicho.Sheets("ダンプ保有一覧")
-SheetD.Activate
-SheetD.Range("a7").Activate
-Set DRowEndD = ActiveCell
-Range(DRowEndD, DRowEndD.End(xlDown).End(xlDown).End(xlDown).Offset(0, 10)).Select
-Selection.Clear
+    SheetC = Sheets.Count
+    Set SheetD = Daicho.Sheets("ダンプ保有一覧")
+    SheetD.Activate
+    SheetD.Range("a7").Activate
+    Set DRowEndD = ActiveCell
+    Range(DRowEndD, DRowEndD.End(xlDown).End(xlDown).End(xlDown).Offset(0, 10)).Select
+    Selection.Clear
 
-Master.Sheets(1).Activate
-Z = 0
-Set CountDumpW = MbodyNum.Offset(0, 11).Find(what:="ワイズダンプ", lookat:=xlPart)
+    Master.Sheets(1).Activate
+    Z = 0
+    Set CountDumpW = MbodyNum.Offset(0, 11).Find(what:="ワイズダンプ", lookat:=xlPart)
 
-If Not CountDumpW Is Nothing Then
-strAddW = CountDumpW.Address
+    If Not CountDumpW Is Nothing Then
+        strAddW = CountDumpW.Address
 
-Do
-w = w + 1
+        Do
+            w = w + 1
 
-Set CountDumpW = MbodyNum.Offset(0, 11).FindNext(CountDumpW)
-DRowEndD.Offset(Z, 5).Value = CountDumpW.Offset(0, -11).Value
-Z = Z + 1
-Loop While Not CountDumpW Is Nothing And strAddW <> CountDumpW.Address
-End If
-Set CountDumpW = Nothing
+            Set CountDumpW = MbodyNum.Offset(0, 11).FindNext(CountDumpW)
+            DRowEndD.Offset(Z, 5).Value = CountDumpW.Offset(0, -11).Value
+            Z = Z + 1
+        Loop While Not CountDumpW Is Nothing And strAddW <> CountDumpW.Address
+    End If
+    Set CountDumpW = Nothing
 
-SheetD.Activate
-Range(Range("a6"), Range("a6").End(xlToRight)).Copy
+    SheetD.Activate
+    Range(Range("a6"), Range("a6").End(xlToRight)).Copy
 
-Range("a7").Offset(w + 2, 1).Select
-Selection.Value = "セブン　保有車両"
-Selection.Offset(1, -1).Select
-Set DrowEndS = Selection
-DrowEndS.PasteSpecial xlPasteAll
+    Range("a7").Offset(w + 2, 1).Select
+    Selection.Value = "セブン　保有車両"
+    Selection.Offset(1, -1).Select
+    Set DrowEndS = Selection
+    DrowEndS.PasteSpecial xlPasteAll
 
-y = 0
-Set CountDumpS = MbodyNum.Offset(0, 11).Find(what:="セブンダンプ", lookat:=xlPart)
+    y = 0
+    Set CountDumpS = MbodyNum.Offset(0, 11).Find(what:="セブンダンプ", lookat:=xlPart)
 
-If Not CountDumpS Is Nothing Then
-strAddS = CountDumpS.Address
+    If Not CountDumpS Is Nothing Then
+        strAddS = CountDumpS.Address
 
-Do
-s = s + 1
+        Do
+            s = s + 1
 
-Set CountDumpS = MbodyNum.Offset(0, 11).FindNext(CountDumpS)
-DrowEndS.Offset(y + 1, 5).Value = CountDumpS.Offset(0, -11).Value
-y = y + 1
-Loop While Not CountDumpS Is Nothing And strAddS <> CountDumpS.Address
-End If
-Set CountDumpS = Nothing
+            Set CountDumpS = MbodyNum.Offset(0, 11).FindNext(CountDumpS)
+            DrowEndS.Offset(y + 1, 5).Value = CountDumpS.Offset(0, -11).Value
+            y = y + 1
+        Loop While Not CountDumpS Is Nothing And strAddS <> CountDumpS.Address
+    End If
+    Set CountDumpS = Nothing
 
-SheetD.Activate
-Range(Range("a6"), Range("a6").End(xlToRight)).Copy
+    SheetD.Activate
+    Range(Range("a6"), Range("a6").End(xlToRight)).Copy
 
-DrowEndS.Offset(s + 2, 1).Select
-Selection.Value = "ホイ-ルクレ-ン"
-Selection.Offset(1, -1).Select
-Selection.PasteSpecial xlPasteAll
+    DrowEndS.Offset(s + 2, 1).Select
+    Selection.Value = "ホイ-ルクレ-ン"
+    Selection.Offset(1, -1).Select
+    Selection.PasteSpecial xlPasteAll
 
-f = 0
-Set countdumpF = MbodyNum.Offset(0, 11).Find(what:="ホイ-ルクレ-ン", lookat:=xlPart)
+    f = 0
+    Set countdumpF = MbodyNum.Offset(0, 11).Find(what:="ホイ-ルクレ-ン", lookat:=xlPart)
 
-If Not countdumpF Is Nothing Then
-strAddF = countdumpF.Address
+    If Not countdumpF Is Nothing Then
+        strAddF = countdumpF.Address
 
-Do
-t = t + 1
+        Do
+            t = t + 1
 
-Set countdumpF = MbodyNum.Offset(0, 11).FindNext(countdumpF)
-DrowEndS.Offset(s + 2 + t + 1, 5).Value = countdumpF.Offset(0, -11).Value
-y = y + 1
-Loop While Not countdumpF Is Nothing And strAddF <> countdumpF.Address
-End If
-Set countdumpF = Nothing
+            Set countdumpF = MbodyNum.Offset(0, 11).FindNext(countdumpF)
+            DrowEndS.Offset(s + 2 + t + 1, 5).Value = countdumpF.Offset(0, -11).Value
+            y = y + 1
+        Loop While Not countdumpF Is Nothing And strAddF <> countdumpF.Address
+    End If
+    Set countdumpF = Nothing
 
-SheetD.Activate
-Range(Range("a6"), Range("a6").End(xlToRight)).Copy
+    SheetD.Activate
+    Range(Range("a6"), Range("a6").End(xlToRight)).Copy
 
 
 
 
-Do Until I = SheetC
-Daicho.Activate
-Sheets(I).Activate
-sheetN = ActiveSheet.Name
-Range("a7").Activate
-Set DRowEnd = ActiveCell
-Range(DRowEnd, DRowEnd.End(xlDown).Offset(0, 10)).Select
-Selection.Clear
+    Do Until I = SheetC
+        Daicho.Activate
+        Sheets(I).Activate
+        sheetN = ActiveSheet.Name
+        Range("a7").Activate
+        Set DRowEnd = ActiveCell
+        Range(DRowEnd, DRowEnd.End(xlDown).Offset(0, 10)).Select
+        Selection.Clear
 
-j = 1
+        j = 1
 
-Do While j < MbodyNum.Count + 1
+        Do While j < MbodyNum.Count + 1
 
-If MbodyNum.Cells(j).Offset(0, 11) = sheetN Then
-MbodyNum.Cells(j).Offset(0, -4).Copy
-DRowEnd.Offset(0, 1).PasteSpecial xlPasteValues
-Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
-DRowEnd.Offset(0, 2).PasteSpecial xlPasteAll
-Master.Sheets(1).Activate
-Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
-DRowEnd.Offset(0, 7).PasteSpecial xlPasteAll
-MbodyNum.Cells(j).Offset(0, 8).Copy
-DRowEnd.Offset(0, 6).PasteSpecial xlPasteAll
-Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
-DRowEnd.Offset(0, 9).PasteSpecial xlPasteAll
-Daicho.Sheets(I).Activate
-DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
-Set DRowEnd = DRowEnd.Offset(1, 0)
-
-ElseIf InStr(MbodyNum.Cells(j).Offset(0, 11).Value, sheetN) Then
-If InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ダンプ") Or _
-MbodyNum.Cells(j).Offset(0, 11).Value = "ホイ-ルクレ-ン" Then
-Set DumpRng = SheetD.UsedRange.Find(what:=MbodyNum.Cells(j), lookat:=xlWhole)
-MbodyNum.Cells(j).Offset(0, -4).Copy
-DRowEnd.Offset(0, 1).PasteSpecial xlPasteValues
-SheetD.Activate
-DumpRng.Offset(0, -4).PasteSpecial xlPasteValues
-Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
-DRowEnd.Offset(0, 2).PasteSpecial xlPasteAll
-DumpRng.Offset(0, -3).PasteSpecial xlPasteAll
-Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
-DRowEnd.Offset(0, 7).PasteSpecial xlPasteAll
-DumpRng.Offset(0, 2).PasteSpecial xlPasteAll
-MbodyNum.Cells(j).Offset(0, 8).Copy
-DRowEnd.Offset(0, 6).PasteSpecial xlPasteAll
-DumpRng.Offset(0, 1).PasteSpecial xlPasteAll
-Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
-DRowEnd.Offset(0, 9).PasteSpecial xlPasteAll
-DumpRng.Offset(0, 4).PasteSpecial xlPasteAll
-Daicho.Sheets(I).Activate
-DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
-Set DRowEnd = DRowEnd.Offset(1, 0)
-SheetD.Activate
-DumpRng.Offset(0, -5).Value = Application.WorksheetFunction.CountA(Range(DumpRng.End(xlUp).Offset(1, 0), DumpRng))
-Set DRowEndD = DRowEndD.Offset(1, 0)
-
-Else
-MbodyNum.Cells(j).Offset(0, -4).Copy
-DRowEnd.Offset(0, 1).PasteSpecial xlPasteValues
-Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
-DRowEnd.Offset(0, 2).PasteSpecial xlPasteAll
-Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
-DRowEnd.Offset(0, 7).PasteSpecial xlPasteAll
-MbodyNum.Cells(j).Offset(0, 8).Copy
-DRowEnd.Offset(0, 6).PasteSpecial xlPasteAll
-Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
-DRowEnd.Offset(0, 9).PasteSpecial xlPasteAll
-Daicho.Sheets(I).Activate
-DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
-Set DRowEnd = DRowEnd.Offset(1, 0)
-End If
-
-ElseIf InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ダンプ") Or _
-MbodyNum.Cells(j).Offset(0, 11).Value = "ホイ-ルクレ-ン" Then
-Set DumpRng = SheetD.UsedRange.Find(what:=MbodyNum.Cells(j), lookat:=xlWhole)
-MbodyNum.Cells(j).Offset(0, -4).Copy
-SheetD.Activate
-DumpRng.Offset(0, -4).PasteSpecial xlPasteValues
-Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
-DumpRng.Offset(0, -3).PasteSpecial xlPasteAll
-Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
-DumpRng.Offset(0, 2).PasteSpecial xlPasteAll
-MbodyNum.Cells(j).Offset(0, 8).Copy
-DumpRng.Offset(0, 1).PasteSpecial xlPasteAll
-Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
-DumpRng.Offset(0, 4).PasteSpecial xlPasteAll
-SheetD.Activate
-DumpRng.Offset(0, -5).Value = Application.WorksheetFunction.CountA(Range(DumpRng.End(xlUp).Offset(1, 0), DumpRng))
-Set DRowEndD = DRowEndD.Offset(1, 0)
-
-ElseIf InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ダンプ") Or _
-MbodyNum.Cells(j).Offset(0, 11).Value = "ホイ-ルクレ-ン" Then
-Set DumpRng = SheetD.UsedRange.Find(what:=MbodyNum.Cells(j), lookat:=xlWhole)
-MbodyNum.Cells(j).Offset(0, -4).Copy
-SheetD.Activate
-DumpRng.Offset(0, -4).PasteSpecial xlPasteValues
-Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
-DumpRng.Offset(0, -3).PasteSpecial xlPasteAll
-Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
-DumpRng.Offset(0, 2).PasteSpecial xlPasteAll
-MbodyNum.Cells(j).Offset(0, 8).Copy
-DumpRng.Offset(0, 1).PasteSpecial xlPasteAll
-Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
-DumpRng.Offset(0, 4).PasteSpecial xlPasteAll
-SheetD.Activate
-DumpRng.Offset(0, -5).Value = Application.WorksheetFunction.CountA(Range(DumpRng.End(xlUp).Offset(1, 0), DumpRng))
-Set DRowEndD = DRowEndD.Offset(1, 0)
-End If
+            If MbodyNum.Cells(j).Offset(0, 11) = sheetN Then
+                MbodyNum.Cells(j).Offset(0, -4).Copy
+                DRowEnd.Offset(0, 1).PasteSpecial xlPasteValues
+                Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
+                DRowEnd.Offset(0, 2).PasteSpecial xlPasteAll
+                Master.Sheets(1).Activate
+                Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
+                DRowEnd.Offset(0, 7).PasteSpecial xlPasteAll
+                MbodyNum.Cells(j).Offset(0, 8).Copy
+                DRowEnd.Offset(0, 6).PasteSpecial xlPasteAll
+                Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
+                DRowEnd.Offset(0, 9).PasteSpecial xlPasteAll
+                If MbodyNum.Cells(j).Offset(0, 20).Value = "X" Then
+                    DRowEnd.Offset(0, 11).Value = "売却"
+                    DRowEnd.Interior.Color = RGB(0, 0, 20)
+                    Daicho.Sheets(I).Activate
+                    Set DRowEnd = DRowEnd.Offset(1, 0)
+                Else
+                    Daicho.Sheets(I).Activate
+                    DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
+                    Set DRowEnd = DRowEnd.Offset(1, 0)
+                End If
 
 
-j = j + 1
+            ElseIf InStr(MbodyNum.Cells(j).Offset(0, 11).Value, sheetN) Then
+                If InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ダンプ") Or _
+                   MbodyNum.Cells(j).Offset(0, 11).Value = "ホイ-ルクレ-ン" Then
+                    Set DumpRng = SheetD.UsedRange.Find(what:=MbodyNum.Cells(j), lookat:=xlWhole)
+                    MbodyNum.Cells(j).Offset(0, -4).Copy
+                    DRowEnd.Offset(0, 1).PasteSpecial xlPasteValues
+                    SheetD.Activate
+                    DumpRng.Offset(0, -4).PasteSpecial xlPasteValues
+                    Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
+                    DRowEnd.Offset(0, 2).PasteSpecial xlPasteAll
+                    DumpRng.Offset(0, -3).PasteSpecial xlPasteAll
+                    Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
+                    DRowEnd.Offset(0, 7).PasteSpecial xlPasteAll
+                    DumpRng.Offset(0, 2).PasteSpecial xlPasteAll
+                    MbodyNum.Cells(j).Offset(0, 8).Copy
+                    DRowEnd.Offset(0, 6).PasteSpecial xlPasteAll
+                    DumpRng.Offset(0, 1).PasteSpecial xlPasteAll
+                    Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
+                    DRowEnd.Offset(0, 9).PasteSpecial xlPasteAll
+                    DumpRng.Offset(0, 4).PasteSpecial xlPasteAll
+                    If MbodyNum.Cells(j).Offset(0, 20).Value = "X" Then
+                        DRowEnd.Offset(0, 11).Value = "売却"
+                        DRowEnd.Interior.Color = RGB(0, 0, 20)
+                        DRowEndD.Offset(0, 11).Value = "売却"
+                        DRowEndD.Interior.Color = RGB(0, 0, 20)
+                        Daicho.Sheets(I).Activate
+                        Set DRowEnd = DRowEnd.Offset(1, 0)
+                        Set DRowEndD = DRowEndD.Offset(1, 0)
+                    Else
+                        Daicho.Sheets(I).Activate
+                        DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
+                        Set DRowEnd = DRowEnd.Offset(1, 0)
+                        SheetD.Activate
+                        DumpRng.Offset(0, -5).Value = Application.WorksheetFunction.CountA(Range(DumpRng.End(xlUp).Offset(1, 0), DumpRng))
+                        Set DRowEndD = DRowEndD.Offset(1, 0)
+                    End If
 
-Loop
+                Else
+                    MbodyNum.Cells(j).Offset(0, -4).Copy
+                    DRowEnd.Offset(0, 1).PasteSpecial xlPasteValues
+                    Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
+                    DRowEnd.Offset(0, 2).PasteSpecial xlPasteAll
+                    Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
+                    DRowEnd.Offset(0, 7).PasteSpecial xlPasteAll
+                    MbodyNum.Cells(j).Offset(0, 8).Copy
+                    DRowEnd.Offset(0, 6).PasteSpecial xlPasteAll
+                    Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
+                    DRowEnd.Offset(0, 9).PasteSpecial xlPasteAll
+                    If MbodyNum.Cells(j).Offset(0, 20).Value = "X" Then
+                        DRowEnd.Offset(0, 11).Value = "売却"
+                        DRowEnd.Interior.Color = RGB(0, 0, 20)
+                        Daicho.Sheets(I).Activate
+                        Set DRowEnd = DRowEnd.Offset(1, 0)
+                    Else
+                        Daicho.Sheets(I).Activate
+                        DRowEnd.Value = Application.WorksheetFunction.CountA(DRowEnd, Range(Range("a7"), Range("a7").End(xlDown))) + 1
+                        Set DRowEnd = DRowEnd.Offset(1, 0)
+                    End If
+                End If
 
-I = I + 1
+            ElseIf InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ダンプ") Or _
+                   MbodyNum.Cells(j).Offset(0, 11).Value = "ホイ-ルクレ-ン" Then
+                Set DumpRng = SheetD.UsedRange.Find(what:=MbodyNum.Cells(j), lookat:=xlWhole)
+                MbodyNum.Cells(j).Offset(0, -4).Copy
+                SheetD.Activate
+                DumpRng.Offset(0, -4).PasteSpecial xlPasteValues
+                Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
+                DumpRng.Offset(0, -3).PasteSpecial xlPasteAll
+                Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
+                DumpRng.Offset(0, 2).PasteSpecial xlPasteAll
+                MbodyNum.Cells(j).Offset(0, 8).Copy
+                DumpRng.Offset(0, 1).PasteSpecial xlPasteAll
+                Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
+                DumpRng.Offset(0, 4).PasteSpecial xlPasteAll
+                If MbodyNum.Cells(j).Offset(0, 20).Value = "X" Then
+                    DRowEndD.Offset(0, 11).Value = "売却"
+                    DRowEndD.Interior.Color = RGB(0, 0, 20)
+                    Set DRowEndD = DRowEndD.Offset(1, 0)
+                Else
+                    SheetD.Activate
+                    DumpRng.Offset(0, -5).Value = Application.WorksheetFunction.CountA(Range(DumpRng.End(xlUp).Offset(1, 0), DumpRng))
+                    Set DRowEndD = DRowEndD.Offset(1, 0)
+                End If
 
-Loop
+            ElseIf InStr(MbodyNum.Cells(j).Offset(0, 11).Value, "ダンプ") Or _
+                   MbodyNum.Cells(j).Offset(0, 11).Value = "ホイ-ルクレ-ン" Then
+                Set DumpRng = SheetD.UsedRange.Find(what:=MbodyNum.Cells(j), lookat:=xlWhole)
+                MbodyNum.Cells(j).Offset(0, -4).Copy
+                SheetD.Activate
+                DumpRng.Offset(0, -4).PasteSpecial xlPasteValues
+                Range(MbodyNum.Cells(j).Offset(0, -3), MbodyNum.Cells(j)).Copy
+                DumpRng.Offset(0, -3).PasteSpecial xlPasteAll
+                Range(MbodyNum.Cells(j).Offset(0, 1), MbodyNum.Cells(j).Offset(0, 2)).Copy
+                DumpRng.Offset(0, 2).PasteSpecial xlPasteAll
+                MbodyNum.Cells(j).Offset(0, 8).Copy
+                DumpRng.Offset(0, 1).PasteSpecial xlPasteAll
+                Range(MbodyNum.Cells(j).Offset(0, 9), MbodyNum.Cells(j).Offset(0, 10)).Copy
+                DumpRng.Offset(0, 4).PasteSpecial xlPasteAll
+                If MbodyNum.Cells(j).Offset(0, 20).Value = "X" Then
+                    DRowEndD.Offset(0, 11).Value = "売却"
+                    DRowEndD.Interior.Color = RGB(0, 0, 20)
+                    Set DRowEndD = DRowEndD.Offset(1, 0)
+                Else
+                    SheetD.Activate
+                    DumpRng.Offset(0, -5).Value = Application.WorksheetFunction.CountA(Range(DumpRng.End(xlUp).Offset(1, 0), DumpRng))
+                    Set DRowEndD = DRowEndD.Offset(1, 0)
+                End If
+            End If
 
 
-Daicho.Activate
+            j = j + 1
 
-k = 1
-For k = 1 To SheetC
-ThisWorkbook.Sheets(k).Activate
-Range(Range("a7"), Range("a7").End(xlDown).Offset(0, 10)).Select
-With Selection.Borders(xlEdgeLeft)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeTop)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeRight)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlInsideVertical)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlInsideHorizontal)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
+        Loop
 
-ActiveSheet.Sort.SortFields.Clear
-   ActiveSheet.Sort.SortFields.Add Key:=Range(Range("F7"), Range("f7").End(xlDown)), _
-        SortOn:=xlSortOnCellColor, Order:=xlAscending, DataOption:=xlSortNormal
-    With ActiveSheet.Sort
-        .SetRange Range(Range("b7"), Range("b7").End(xlDown).Offset(0, 9))
-        .Header = xlGuess
-        .MatchCase = False
-        .Orientation = xlTopToBottom
-        .SortMethod = xlPinYin
-        .Apply
-    End With
+        I = I + 1
 
-Range(Selection.End(xlDown).Offset(1, 0), Selection.End(xlDown).Offset(1, 10)).Select
-Selection.ClearFormats
+    Loop
 
-If ActiveSheet.Name = SheetD.Name Then
-Range("d3").Value = Application.WorksheetFunction.Count(Columns(1)) & "台"
-Range("a7").Select
-Selection.End(xlDown).End(xlDown).Select
-Do Until Selection.Value = ""
-Range(Selection, Selection.End(xlDown).Offset(0, 10)).Select
-With Selection.Borders(xlEdgeLeft)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeTop)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeRight)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlInsideVertical)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlInsideHorizontal)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-Selection.End(xlDown).End(xlDown).Select
-Loop
-Else
-Range("d3").Value = Range("a7").End(xlDown).Value & "台"
-End If
-Range("a7").Activate
-Next k
+
+    Daicho.Activate
+
+    k = 1
+    For k = 1 To SheetC
+        ThisWorkbook.Sheets(k).Activate
+        Range(Range("a7"), Range("a7").End(xlDown).Offset(0, 10)).Select
+        With Selection.Borders(xlEdgeLeft)
+            .LineStyle = xlContinuous
+            .ColorIndex = 0
+            .TintAndShade = 0
+            .Weight = xlThin
+        End With
+        With Selection.Borders(xlEdgeTop)
+            .LineStyle = xlContinuous
+            .ColorIndex = 0
+            .TintAndShade = 0
+            .Weight = xlThin
+        End With
+        With Selection.Borders(xlEdgeBottom)
+            .LineStyle = xlContinuous
+            .ColorIndex = 0
+            .TintAndShade = 0
+            .Weight = xlThin
+        End With
+        With Selection.Borders(xlEdgeRight)
+            .LineStyle = xlContinuous
+            .ColorIndex = 0
+            .TintAndShade = 0
+            .Weight = xlThin
+        End With
+        With Selection.Borders(xlInsideVertical)
+            .LineStyle = xlContinuous
+            .ColorIndex = 0
+            .TintAndShade = 0
+            .Weight = xlThin
+        End With
+        With Selection.Borders(xlInsideHorizontal)
+            .LineStyle = xlContinuous
+            .ColorIndex = 0
+            .TintAndShade = 0
+            .Weight = xlThin
+        End With
+
+        ActiveSheet.Sort.SortFields.Clear
+        ActiveSheet.Sort.SortFields.Add Key:=Range(Range("F7"), Range("f7").End(xlDown)), _
+                                        SortOn:=xlSortOnCellColor, Order:=xlAscending, DataOption:=xlSortNormal
+        With ActiveSheet.Sort
+            .SetRange Range(Range("b7"), Range("b7").End(xlDown).Offset(0, 9))
+            .Header = xlGuess
+            .MatchCase = False
+            .Orientation = xlTopToBottom
+            .SortMethod = xlPinYin
+            .Apply
+        End With
+
+        Range(Selection.End(xlDown).Offset(1, 0), Selection.End(xlDown).Offset(1, 10)).Select
+        Selection.ClearFormats
+
+        If ActiveSheet.Name = SheetD.Name Then
+            Range("d3").Value = Application.WorksheetFunction.Count(Columns(1)) & "台"
+            Range("a7").Select
+            Selection.End(xlDown).End(xlDown).Select
+            Do Until Selection.Value = ""
+                Range(Selection, Selection.End(xlDown).Offset(0, 10)).Select
+                With Selection.Borders(xlEdgeLeft)
+                    .LineStyle = xlContinuous
+                    .ColorIndex = 0
+                    .TintAndShade = 0
+                    .Weight = xlThin
+                End With
+                With Selection.Borders(xlEdgeTop)
+                    .LineStyle = xlContinuous
+                    .ColorIndex = 0
+                    .TintAndShade = 0
+                    .Weight = xlThin
+                End With
+                With Selection.Borders(xlEdgeBottom)
+                    .LineStyle = xlContinuous
+                    .ColorIndex = 0
+                    .TintAndShade = 0
+                    .Weight = xlThin
+                End With
+                With Selection.Borders(xlEdgeRight)
+                    .LineStyle = xlContinuous
+                    .ColorIndex = 0
+                    .TintAndShade = 0
+                    .Weight = xlThin
+                End With
+                With Selection.Borders(xlInsideVertical)
+                    .LineStyle = xlContinuous
+                    .ColorIndex = 0
+                    .TintAndShade = 0
+                    .Weight = xlThin
+                End With
+                With Selection.Borders(xlInsideHorizontal)
+                    .LineStyle = xlContinuous
+                    .ColorIndex = 0
+                    .TintAndShade = 0
+                    .Weight = xlThin
+                End With
+                Selection.End(xlDown).End(xlDown).Select
+            Loop
+        Else
+            Range("d3").Value = Range("a7").End(xlDown).Value & "台"
+        End If
+        Range("a7").Activate
+    Next k
 
 End If
 Master.Close False
