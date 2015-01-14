@@ -4,7 +4,7 @@ Sub DaichoInput()
 Dim Daicho As Workbook
 Dim DbodyC As Integer
 Dim DRowEnd As Range, DRowEndD As Range, DrowEndS As Range
-Dim MbodyNum As Range
+Dim MbodyNum As Range, CarRng As Range
 Dim SheetC As Integer
 Dim sheetN As String
 Dim Master As Workbook
@@ -14,6 +14,7 @@ Dim CountDumpW As Range, CountDumpS As Range, countdumpF As Range
 Dim strAddW As String, strAddS As String, strAddF As String
 Dim DumpRng As Range
 Dim strFP As String
+Dim CarCount As Integer
 
 strFP = ThisWorkbook.Path
 dateT = Format(Now, YYYY - MM - DD)
@@ -43,7 +44,7 @@ Else
     SheetD.Activate
     SheetD.Range("a7").Activate
     Set DRowEndD = ActiveCell
-    Range(DRowEndD, DRowEndD.End(xlDown).End(xlDown).End(xlDown).Offset(0, 10)).Select
+    Range(DRowEndD, DRowEndD.End(xlDown).End(xlDown).End(xlDown).Offset(0, 11)).Select
     Selection.Clear
 
     Master.Sheets(1).Activate
@@ -124,7 +125,7 @@ Else
         sheetN = ActiveSheet.Name
         Range("a7").Activate
         Set DRowEnd = ActiveCell
-        Range(DRowEnd, DRowEnd.End(xlDown).Offset(0, 10)).Select
+        Range(DRowEnd, DRowEnd.End(xlDown).End(xlDown).End(xlDown).Offset(0, 11)).Select
         Selection.Clear
 
         j = 1
@@ -145,7 +146,8 @@ Else
                 DRowEnd.Offset(0, 9).PasteSpecial xlPasteAll
                 If MbodyNum.Cells(j).Offset(0, 20).Value = "X" Then
                     DRowEnd.Offset(0, 11).Value = "”„‹p"
-                    DRowEnd.Interior.Color = RGB(0, 0, 20)
+                    DRowEnd.Interior.Color = rgbDarkGray
+                    DRowEnd.Value = "-"
                     Daicho.Sheets(I).Activate
                     Set DRowEnd = DRowEnd.Offset(1, 0)
                 Else
@@ -177,9 +179,11 @@ Else
                     DumpRng.Offset(0, 4).PasteSpecial xlPasteAll
                     If MbodyNum.Cells(j).Offset(0, 20).Value = "X" Then
                         DRowEnd.Offset(0, 11).Value = "”„‹p"
-                        DRowEnd.Interior.Color = RGB(0, 0, 20)
+                        DRowEnd.Interior.Color = rgbDarkGray
+                        DRowEnd.Value = "-"
                         DRowEndD.Offset(0, 11).Value = "”„‹p"
-                        DRowEndD.Interior.Color = RGB(0, 0, 20)
+                        DRowEndD.Interior.Color = rgbDarkGray
+                        DRowEndD.Value = "-"
                         Daicho.Sheets(I).Activate
                         Set DRowEnd = DRowEnd.Offset(1, 0)
                         Set DRowEndD = DRowEndD.Offset(1, 0)
@@ -205,7 +209,8 @@ Else
                     DRowEnd.Offset(0, 9).PasteSpecial xlPasteAll
                     If MbodyNum.Cells(j).Offset(0, 20).Value = "X" Then
                         DRowEnd.Offset(0, 11).Value = "”„‹p"
-                        DRowEnd.Interior.Color = RGB(0, 0, 20)
+                        DRowEnd.Interior.Color = rgbDarkGray
+                        DRowEnd.Value = "-"
                         Daicho.Sheets(I).Activate
                         Set DRowEnd = DRowEnd.Offset(1, 0)
                     Else
@@ -231,7 +236,8 @@ Else
                 DumpRng.Offset(0, 4).PasteSpecial xlPasteAll
                 If MbodyNum.Cells(j).Offset(0, 20).Value = "X" Then
                     DRowEndD.Offset(0, 11).Value = "”„‹p"
-                    DRowEndD.Interior.Color = RGB(0, 0, 20)
+                    DRowEndD.Interior.Color = rgbDarkGray
+                    DRowEndD.Value = "-"
                     Set DRowEndD = DRowEndD.Offset(1, 0)
                 Else
                     SheetD.Activate
@@ -255,7 +261,8 @@ Else
                 DumpRng.Offset(0, 4).PasteSpecial xlPasteAll
                 If MbodyNum.Cells(j).Offset(0, 20).Value = "X" Then
                     DRowEndD.Offset(0, 11).Value = "”„‹p"
-                    DRowEndD.Interior.Color = RGB(0, 0, 20)
+                    DRowEndD.Interior.Color = rgbDarkGray
+                    DRowEndD.Value = "-"
                     Set DRowEndD = DRowEndD.Offset(1, 0)
                 Else
                     SheetD.Activate
@@ -321,7 +328,7 @@ Else
         ActiveSheet.Sort.SortFields.Add Key:=Range(Range("F7"), Range("f7").End(xlDown)), _
                                         SortOn:=xlSortOnCellColor, Order:=xlAscending, DataOption:=xlSortNormal
         With ActiveSheet.Sort
-            .SetRange Range(Range("b7"), Range("b7").End(xlDown).Offset(0, 9))
+            .SetRange Range(Range("a7"), Range("a7").End(xlDown).Offset(0, 11))
             .Header = xlGuess
             .MatchCase = False
             .Orientation = xlTopToBottom
@@ -377,7 +384,11 @@ Else
                 Selection.End(xlDown).End(xlDown).Select
             Loop
         Else
-            Range("d3").Value = Range("a7").End(xlDown).Value & "‘ä"
+             CarCount = Application.WorksheetFunction.Count(Columns(1))
+             Range("d3").Value = CarCount & "‘ä"
+             Range("a7").Select
+             Set CarRng = Range(Selection, Selection.Offset(CarCount - 1, 0))
+             Selection.AutoFill Destination:=CarRng, Type:=xlFillSeries
         End If
         Range("a7").Activate
     Next k
