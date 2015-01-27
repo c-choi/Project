@@ -342,9 +342,19 @@ Else
         If ActiveSheet.Name = SheetD.Name Then
             Range("d3").Value = Application.WorksheetFunction.Count(Columns(1)) & "‘ä"
             Range("a7").Select
+            Range(Selection, Selection.End(xlDown)).Select
+            Range(Selection, Selection.End(xlDown).Offset(0, 10)).Select
+            With Selection
+                .HorizontalAlignment = xlCenter
+                .VerticalAlignment = xlCenter
+            End With
             Selection.End(xlDown).End(xlDown).Select
             Do Until Selection.Value = ""
                 Range(Selection, Selection.End(xlDown).Offset(0, 10)).Select
+                With Selection
+                    .HorizontalAlignment = xlCenter
+                    .VerticalAlignment = xlCenter
+                End With
                 With Selection.Borders(xlEdgeLeft)
                     .LineStyle = xlContinuous
                     .ColorIndex = 0
@@ -381,14 +391,19 @@ Else
                     .TintAndShade = 0
                     .Weight = xlThin
                 End With
+
                 Selection.End(xlDown).End(xlDown).Select
             Loop
         Else
-             CarCount = Application.WorksheetFunction.Count(Columns(1))
-             Range("d3").Value = CarCount & "‘ä"
-             Range("a7").Select
-             Set CarRng = Range(Selection, Selection.Offset(CarCount - 1, 0))
-             Selection.AutoFill Destination:=CarRng, Type:=xlFillSeries
+            CarCount = Application.WorksheetFunction.Count(Columns(1))
+            Range("d3").Value = CarCount & "‘ä"
+            Range("a7").Select
+            Set CarRng = Range(Selection, Selection.Offset(CarCount - 1, 0))
+            Selection.AutoFill Destination:=CarRng, Type:=xlFillSeries
+            With Range(CarRng, CarRng.Offset(0, 1))
+                .HorizontalAlignment = xlCenter
+                .VerticalAlignment = xlCenter
+            End With
         End If
         Range("a7").Activate
     Next k
