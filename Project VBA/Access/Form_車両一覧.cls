@@ -36,11 +36,13 @@ SQL = SQL & " Where (((車両台帳.場所) = " & [Forms]![車両一覧]![cmbLoca] & ")"
  Set rs = ds.OpenRecordset(SQL)
  
  Me.lblResultRecordCount.Caption = "(" & rs(0) & ")件検索"
-
-
+Me.tbDaichoBodyNum = ""
+Me.tbDaichoCarNum = ""
 
 End Sub
-Private Sub chkcompcar_Change()
+
+
+Private Sub chkCompCar_afterupdate()
 
 Dim SQL As String
 
@@ -69,11 +71,13 @@ SQL = SQL & " Where (((車両台帳.場所) = " & [Forms]![車両一覧]![cmbLoca] & ")"
  Set rs = ds.OpenRecordset(SQL)
  
  Me.lblResultRecordCount.Caption = "(" & rs(0) & ")件検索"
-
-
-
+Me.tbDaichoBodyNum = ""
+Me.tbDaichoCarNum = ""
+Me.chkDump = "0"
 End Sub
-Private Sub chkdump_Change()
+
+
+Private Sub chkDump_afterupdate()
 
 Dim SQL As String
 
@@ -102,8 +106,95 @@ SQL = SQL & " Where (((車両台帳.場所) = " & [Forms]![車両一覧]![cmbLoca] & ")"
  Set rs = ds.OpenRecordset(SQL)
  
  Me.lblResultRecordCount.Caption = "(" & rs(0) & ")件検索"
+ Me.tbDaichoBodyNum = ""
+Me.tbDaichoCarNum = ""
+Me.chkCompCar = "0"
+End Sub
 
 
 
+Private Sub tbDaichoCarNum_afterupdate()
+
+Dim SQL As String
+Dim ds As Database
+Dim rs As Recordset
+ 
+SQL = " select 車両台帳.登録,　車両台帳.番号,　車両台帳.初度登録,　車両台帳.型式,　車両台帳.車名,　車両台帳.車台番号,"
+SQL = SQL & " 車両台帳.種別,　車両台帳.最大積載量,　車両台帳.車両総重量,　車両台帳.Nox・PM法,　車両台帳.基準緩和事項,　車両台帳.場所, 車両台帳.社用車, 車両台帳.ダンプ"
+SQL = SQL & " from 車両台帳"
+SQL = SQL & " Where (((車両台帳.番号) = " & [Forms]![車両一覧]![tbDaichoCarNum] & "))"
+Me.lstDaicho.RowSource = SQL
+DoCmd.Requery "lstdaicho"
+On Error Resume Next
+If Not IsNull(tbDaichoCarNum) Then
+
+SQL = " select count(車両台帳.登録) AS 登録番号の個数"
+SQL = SQL & " From 車両台帳"
+SQL = SQL & " Where (((車両台帳.番号) = " & [Forms]![車両一覧]![tbDaichoCarNum] & "))"
+
+ 
+ 
+ 
+ Set ds = CurrentDb
+ Set rs = ds.OpenRecordset(SQL)
+ 
+ Me.lblResultRecordCount.Caption = "(" & rs(0) & ")件検索"
+ tbDaichoCarNum.SetFocus
+Else
+
+ Me.lblResultRecordCount.Caption = "(0)件検索"
+ 
+ 
+Exit Sub
+tbDaichoCarNum.SetFocus
+End If
+Me.tbDaichoBodyNum = ""
+Me.cmbLoca = "17"
+Me.chkDump = "0"
+Me.chkCompCar = "0"
+tbDaichoCarNum.SetFocus
+End Sub
+
+
+Private Sub tbdaichobodyNum_afterupdate()
+
+Dim SQL As String
+ Dim ds As Database
+ Dim rs As Recordset
+ 
+
+SQL = " select 車両台帳.登録,　車両台帳.番号,　車両台帳.初度登録,　車両台帳.型式,　車両台帳.車名,　車両台帳.車台番号,"
+SQL = SQL & " 車両台帳.種別,　車両台帳.最大積載量,　車両台帳.車両総重量,　車両台帳.Nox・PM法,　車両台帳.基準緩和事項,　車両台帳.場所, 車両台帳.社用車, 車両台帳.ダンプ"
+SQL = SQL & " from 車両台帳"
+SQL = SQL & " Where ((車両台帳.車台番号) = '" & [Forms]![車両一覧]![tbDaichoBodyNum] & "')"
+Me.lstDaicho.RowSource = SQL
+DoCmd.Requery "lstdaicho"
+On Error Resume Next
+If Not IsNull(tbDaichoBodyNum) Then
+
+SQL = " select count(車両台帳.登録) AS 登録番号の個数"
+SQL = SQL & " From 車両台帳"
+SQL = SQL & " Where ((車両台帳.車台番号) = '" & [Forms]![車両一覧]![tbDaichoBodyNum] & "'))"
+
+
+ Set ds = CurrentDb
+ Set rs = ds.OpenRecordset(SQL)
+ 
+ Me.lbldaichoResultRecordCount.Caption = "(" & rs(0) & ")件検索"
+Else
+
+
+ Me.lbldaichoResultRecordCount.Caption = "(0)件検索"
+ tbDaichoBodyNum.SetFocus
+ 
+Exit Sub
+tbDaichoBodyNum.SetFocus
+End If
+Me.tbDaichoCarNum = ""
+Me.cmbLoca = "17"
+Me.chkDump = "0"
+Me.chkCompCar = "0"
+tbDaichoBodyNum.SetFocus
+ 
 End Sub
 
