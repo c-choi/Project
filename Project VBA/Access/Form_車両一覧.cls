@@ -115,6 +115,37 @@ End Sub
 
 
 
+Private Sub cmblstComp_Change()
+
+Dim sql As String
+
+sql = " select 車両台帳.登録, 車両台帳.番号, Lease車両.[リ-ス会社], Lease車両.[リ-ス満了日], Lease車両.[月額リ-ス料], 車両台帳.初度登録,　車両台帳.型式,　車両台帳.車名,　車両台帳.車台番号,"
+sql = sql & " 車両台帳.最大積載量,　車両台帳.車両総重量,　車両台帳.Nox・PM法,　車両台帳.基準緩和事項,　車両台帳.場所"
+sql = sql & " from 車両台帳 INNER JOIN Lease車両 ON 車両台帳.車台番号 = Lease車両.車台番号"
+sql = sql & " Where ((車両台帳.使用者) ='" & [Forms]![車両一覧]![cmblstComp] & "')"
+sql = sql & " order by 車両台帳.車台番号"
+Me.lstFirstReg.RowSource = sql
+
+DoCmd.Requery "lstFirstReg"
+
+sql = " select count(車両台帳.登録) AS 登録番号の個数"
+sql = sql & " From 車両台帳 車両台帳 INNER JOIN Lease車両 ON 車両台帳.車台番号 = Lease車両.車台番号"
+sql = sql & " Where ((車両台帳.場所) = " & [Forms]![車両一覧]![cmblstComp] & ")"
+
+ 
+ Dim ds As Database
+ Dim rs As Recordset
+ 
+ Set ds = CurrentDb
+ 'Set rs = ds.OpenRecordset(sql)
+ 
+ 'Me.lblResultRecordcount2.Caption = "(" & rs(0) & ")件検索"
+
+
+
+End Sub
+
+
 Private Sub tbDaichoCarNum_afterupdate()
 
 Dim sql As String
