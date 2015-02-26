@@ -50,7 +50,7 @@ Else
 Beep
 MsgBox rs("UserID") & "‚ÅƒƒOƒCƒ“‚µ‚Ü‚µ‚½B"
 DoCmd.Close
-DoCmd.OpenForm "Ô—¼ˆê——"
+DoCmd.OpenForm "frmmain"
 End If
 
 End If
