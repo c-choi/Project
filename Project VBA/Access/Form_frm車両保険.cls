@@ -13,13 +13,25 @@ Option Compare Database
 Private Sub lstDaicho_DblClick(Cancel As Integer)
 Dim rds As ADODB.Recordset
 Dim countrecord As Variant
+Dim bodynum As Variant
+
 Set rds = New ADODB.Recordset
 Set rds.ActiveConnection = CurrentProject.Connection
 rds.LockType = adLockPessimistic
-
+Me.tbInsuNum = ""
+Me.tbstartdate = ""
+Me.tbEndDate = ""
 rds.Open "select * from [車両台帳] where [車台番号] = '" & Me.lstDaicho.Column(2) & "'"
-Me.tbBodyNum = rds("車台番号")
-
+If IsNull(lstDaicho.Column(2)) Then
+Me.tbIcarnum = ""
+Me.tbBodyNum = ""
+Me.tbInsuNum = ""
+Me.tbstartdate = ""
+Me.tbEndDate = ""
+Exit Sub
+Else
+bodynum = rds("車台番号")
+Me.tbBodyNum = bodynum
 rds.Close
 
 countrecord = DCount("id", "車両保険", "id='" & Me.tbBodyNum & "'")
@@ -32,19 +44,12 @@ Me.tbBodyNum = rds("id")
 Me.tbInsuNum = rds("証券番号")
 Me.tbstartdate = rds("始期日")
 Me.tbEndDate = rds("満期日")
+rds.Close
 
 Else
-rds.Open "select * from [車両保険] where [ID] = '" & Me.lstDaicho.Column(2) & "'"
-rds.AddNew
-Me.tbInsuNum = ""
-Me.tbstartdate = ""
-Me.tbEndDate = ""
-Me.BxReg = Me.lstDaicho.Column(0)
-Me.bxNum = Me.lstDaicho.Column(1)
-Me.bxbodynum = Me.tbBodyNum
-
 Me.tbInsuNum.SetFocus
 
+End If
 End If
 Set rds = Nothing
 End Sub
@@ -92,32 +97,97 @@ End Sub
 Private Sub cmdupdate_Click()
 Dim rst As ADODB.Recordset
 On Error GoTo cmdupdate_Click_Err
+
 Set rst = New ADODB.Recordset
+Me.Form.AllowAdditions = True
+Me.Form.AllowEdits = True
+If Me.lblResultRecordCount.Caption = "(0)件検索" Then
+    If Me.tbBodyNum = "" Then
+        Exit Sub
+    Else
+        rst.Open "車両保険", CurrentProject.Connection, adOpenDynamic, adLockOptimistic
+        With rst
+            .AddNew
+            !証券番号 = Me.tbInsuNum
+            !始期日 = Me.tbstartdate
+            !満期日 = Me.tbEndDate
+            .Update
+            .Save
+
+            .Requery
+
+            .Close
+
+        End With
+        lstInsurance.Requery
+    End If
+Else
 
     rst.Open "車両保険", CurrentProject.Connection, adOpenDynamic, adLockOptimistic
+    rst.MoveFirst
+    Do
+        If rst!ID = Me.tbBodyNum Then
 
-    With rst
-    .Save
-    !ID = Me.bxbodynum
-    !証券番号 = Me.tbInsuNum
-    !始期日 = Me.tbstartdate
-    !満期日 = Me.tbEndDate
-    
-    .Update
-    rst.Requery
-    .Close
-    End With
-    
+            With rst
+                !証券番号 = Me.tbInsuNum
+                !始期日 = Me.tbstartdate
+                !満期日 = Me.tbEndDate
+                .Update
+
+                .Requery
+                .Close
+                lstInsurance.Requery
+            End With
+            Set rst = Nothing
+            Exit Sub
+
+        End If
+        rst.MoveNext
+    Loop Until rst.EOF
+            
+          If rst.EOF Then
+          rst.Close
+            rst.Open "車両保険", CurrentProject.Connection, adOpenDynamic, adLockOptimistic
+        With rst
+            .AddNew
+            !ID = Me.tbBodyNum
+            !証券番号 = Me.tbInsuNum
+            !始期日 = Me.tbstartdate
+            !満期日 = Me.tbEndDate
+            .Update
+            .Save
+
+            .Requery
+
+            .Close
+
+        End With
+            End If
+        lstInsurance.Requery
+        
     Set rst = Nothing
 
+End If
+
+
+
 cmdupdate_Click_Exit:
-    Exit Sub
+
+Exit Sub
 
 cmdupdate_Click_Err:
-    MsgBox Error$
-    Resume cmdupdate_Click_Exit
+MsgBox Error$
+Resume cmdupdate_Click_Exit
 
 End Sub
 
+
+
+
+cmdDelete_Click_Err:
+    MsgBox Error$
+    Resume cmdDelete_Click_Exit
+
+End Sub
 
 
