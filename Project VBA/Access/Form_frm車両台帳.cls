@@ -169,6 +169,7 @@ End If
 
 Me.cmbLoca = "17"
 Me.chkDump = "0"
+Me.chkCompCar = "0"
 
 tbDaichoCarNum.SetFocus
 End Sub
