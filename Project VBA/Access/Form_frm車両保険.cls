@@ -10,6 +10,53 @@ Attribute VB_Exposed = False
 Option Compare Database
 
 
+Private Sub cmddel_Click()
+On Error GoTo cmddel_click_err
+
+    If IsNull(Me.tbBodyNum) Or IsNull(Me.tbInsuNum) Or IsNull(Me.lstInsurance) Then
+    MsgBox "íœ‚·‚éî•ñ‚ğ‘I‚×‚Ä‚­‚¾‚³‚¢B"
+    Exit Sub
+    End If
+    
+    Dim sql, msg, style, title, help, ctxt, response, message, default, myvalue
+    
+    msg = Me.tbBodyNum & "‚Ì•ÛŒ¯î•ñ‚ğíœ‚µ‚Ü‚·‚©H"
+    style = vbYesNo + vbCritical + vbDefaultButton1
+    title = "íœ"
+    
+    response = MsgBox(msg, style, title)
+    
+    If response = vbYes Then
+    
+    Dim rs As ADODB.Recordset
+    Set rs = New ADODB.Recordset
+    rs.ActiveConnection = CurrentProject.Connection
+    rs.CursorType = adOpenDynamic
+    rs.LockType = adLockOptimistic
+    
+    rs.Open "select * from [Ô—¼•ÛŒ¯] where [id] = '" & Me.tbBodyNum & "'"
+    
+    Do Until rs.EOF
+     
+     rs.Delete
+     rs.MoveNext
+    Loop
+    
+    Set rs = Nothing
+    
+    MsgBox Me.tbBodyNum & "‚Ì•ÛŒ¯î•ñ‚ğíœ‚µ‚Ü‚µ‚½B"
+    DoCmd.Requery "lstInsurance"
+    
+Else
+ MsgBox "•Â‚¶‚Ü‚·B"
+    End If
+    
+cmddel_click_err:
+    If Err.Number <> 0 Then
+    MsgBox "Error" & Err.Number & " " & Err.Description
+    End If
+End Sub
+
 Private Sub lstDaicho_DblClick(Cancel As Integer)
 Dim rds As ADODB.Recordset
 Dim countrecord As Variant
@@ -56,7 +103,7 @@ End Sub
 
 Private Sub tbICarnum_AfterUpdate()
 
-Dim SQL As String
+Dim sql As String
 Dim ds As Database
 Dim rs As Recordset
 Dim rstC As DAO.Recordset
@@ -65,21 +112,21 @@ If IsNull(tbIcarnum) Then
 Exit Sub
 Else
 
-SQL = " select Ô—¼‘ä’ .“o˜^, Ô—¼‘ä’ .”Ô†, Ô—¼‘ä’ .Ô‘ä”Ô†"
-SQL = SQL & " from Ô—¼‘ä’ "
-SQL = SQL & " Where ((Ô—¼‘ä’ .”Ô†) = " & [Forms]![frmÔ—¼•ÛŒ¯]![tbIcarnum] & ")"
-Me.lstDaicho.RowSource = SQL
+sql = " select Ô—¼‘ä’ .“o˜^, Ô—¼‘ä’ .”Ô†, Ô—¼‘ä’ .Ô‘ä”Ô†"
+sql = sql & " from Ô—¼‘ä’ "
+sql = sql & " Where ((Ô—¼‘ä’ .”Ô†) = " & [Forms]![frmÔ—¼•ÛŒ¯]![tbIcarnum] & ")"
+Me.lstDaicho.RowSource = sql
 
 
 DoCmd.Requery "lstdaicho"
 
-SQL = " select count(Ô—¼‘ä’ .“o˜^) AS “o˜^”Ô†‚ÌŒÂ”"
-SQL = SQL & " From Ô—¼‘ä’ "
-SQL = SQL & " Where ((Ô—¼‘ä’ .”Ô†) = " & [Forms]![frmÔ—¼•ÛŒ¯]![tbIcarnum] & ")"
+sql = " select count(Ô—¼‘ä’ .“o˜^) AS “o˜^”Ô†‚ÌŒÂ”"
+sql = sql & " From Ô—¼‘ä’ "
+sql = sql & " Where ((Ô—¼‘ä’ .”Ô†) = " & [Forms]![frmÔ—¼•ÛŒ¯]![tbIcarnum] & ")"
 
  
  Set ds = CurrentDb
- Set rs = ds.OpenRecordset(SQL)
+ Set rs = ds.OpenRecordset(sql)
  
  Me.lblResultRecordCount.Caption = "(" & rs(0) & ")ŒŒŸõ"
  
@@ -96,11 +143,15 @@ End Sub
 '------------------------------------------------------------
 Private Sub cmdupdate_Click()
 Dim rst As ADODB.Recordset
+Dim startdate As Date, enddate As Date
 On Error GoTo cmdupdate_Click_Err
 
 Set rst = New ADODB.Recordset
 Me.Form.AllowAdditions = True
 Me.Form.AllowEdits = True
+startdate = Me.tbstartdate
+enddate = Me.tbEndDate
+
 If Me.lblResultRecordCount.Caption = "(0)ŒŒŸõ" Then
     If Me.tbBodyNum = "" Then
         Exit Sub
@@ -109,8 +160,8 @@ If Me.lblResultRecordCount.Caption = "(0)ŒŒŸõ" Then
         With rst
             .AddNew
             !ØŒ””Ô† = Me.tbInsuNum
-            !nŠú“ú = Me.tbstartdate
-            !–Šú“ú = Me.tbEndDate
+            !nŠú“ú = startdate
+            !–Šú“ú = enddate
             .Update
             .Save
 
@@ -130,8 +181,8 @@ Else
 
             With rst
                 !ØŒ””Ô† = Me.tbInsuNum
-                !nŠú“ú = Me.tbstartdate
-                !–Šú“ú = Me.tbEndDate
+                !nŠú“ú = startdate
+                !–Šú“ú = enddate
                 .Update
 
                 .Requery
@@ -152,8 +203,8 @@ Else
             .AddNew
             !ID = Me.tbBodyNum
             !ØŒ””Ô† = Me.tbInsuNum
-            !nŠú“ú = Me.tbstartdate
-            !–Šú“ú = Me.tbEndDate
+            !nŠú“ú = startdate
+            !–Šú“ú = enddate
             .Update
             .Save
 
@@ -178,15 +229,6 @@ Exit Sub
 cmdupdate_Click_Err:
 MsgBox Error$
 Resume cmdupdate_Click_Exit
-
-End Sub
-
-
-
-
-cmdDelete_Click_Err:
-    MsgBox Error$
-    Resume cmdDelete_Click_Exit
 
 End Sub
 
