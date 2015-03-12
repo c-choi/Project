@@ -10,66 +10,87 @@ Attribute VB_Exposed = False
 Option Explicit
 Private Sub cmbLoca_AfterUpdate()
 
-Dim SQL As String
+Dim sql As String
 
-SQL = " select 車両台帳.登録,　車両台帳.番号,　車両台帳.初度登録,　車両台帳.型式,　車両台帳.車名,　車両台帳.車台番号,"
-SQL = SQL & " 車両台帳.種別,　車両台帳.最大積載量,　車両台帳.車両総重量,　車両台帳.Nox・PM法,　車両台帳.基準緩和事項,　車両台帳.場所, 車両台帳.社用車, 車両台帳.ダンプ"
-SQL = SQL & " from 車両台帳"
-SQL = SQL & " Where (((車両台帳.場所) = " & [Forms]![frm車両台帳]![cmbLoca] & ")"
- SQL = SQL & " and ((車両台帳.社用車) = " & [Forms]![frm車両台帳]![chkCompCar] & ")"
- SQL = SQL & " and ((車両台帳.ダンプ) = " & [Forms]![frm車両台帳]![chkDump] & "))"
-SQL = SQL & " order by 車両台帳.車台番号;"
-Me.lstDaicho.RowSource = SQL
+sql = " select 車両台帳.登録,　車両台帳.番号,　車両台帳.初度登録,　車両台帳.型式,　車両台帳.車名,　車両台帳.車台番号,"
+sql = sql & " 車両台帳.種別,　車両台帳.最大積載量,　車両台帳.車両総重量,　車両台帳.Nox・PM法,　車両台帳.基準緩和事項,　車両台帳.場所, 車両台帳.社用車, 車両台帳.ダンプ"
+sql = sql & " from 車両台帳"
+sql = sql & " Where (((車両台帳.場所) = " & [Forms]![frm車両台帳]![cmbLoca] & ")"
+ sql = sql & " and ((車両台帳.社用車) = " & [Forms]![frm車両台帳]![chkCompCar] & ")"
+ sql = sql & " and ((車両台帳.ダンプ) = " & [Forms]![frm車両台帳]![chkDump] & "))"
+sql = sql & " order by 車両台帳.番号;"
+Me.lstDaicho.RowSource = sql
 
 DoCmd.Requery "lstDaicho"
 
-SQL = " select count(車両台帳.登録) AS 登録番号の個数"
-SQL = SQL & " From 車両台帳"
-SQL = SQL & " Where (((車両台帳.場所) = " & [Forms]![frm車両台帳]![cmbLoca] & ")"
- SQL = SQL & " and ((車両台帳.社用車) = " & [Forms]![frm車両台帳]![chkCompCar] & ")"
- SQL = SQL & " and ((車両台帳.ダンプ) = " & [Forms]![frm車両台帳]![chkDump] & "))"
+sql = " select count(車両台帳.登録) AS 登録番号の個数"
+sql = sql & " From 車両台帳"
+sql = sql & " Where (((車両台帳.場所) = " & [Forms]![frm車両台帳]![cmbLoca] & ")"
+ sql = sql & " and ((車両台帳.社用車) = " & [Forms]![frm車両台帳]![chkCompCar] & ")"
+ sql = sql & " and ((車両台帳.ダンプ) = " & [Forms]![frm車両台帳]![chkDump] & "))"
  
  
  Dim ds As Database
  Dim rs As Recordset
  
  Set ds = CurrentDb
- Set rs = ds.OpenRecordset(SQL)
+ Set rs = ds.OpenRecordset(sql)
  
  Me.lblResultRecordCount.Caption = "(" & rs(0) & ")件検索"
 
 Me.tbDaichoCarNum = ""
 
+If Me.cmbLoca.Value = "12" Then
+chkDump = 0
+chkCompCar = -1
+chkCompCar_afterupdate
+ElseIf Me.cmbLoca.Value = "13" Then
+chkDump = 0
+chkCompCar = -1
+chkCompCar_afterupdate
+ElseIf Me.cmbLoca.Value = "10" Then
+chkCompCar = 0
+chkDump = -1
+chkDump_afterupdate
+ElseIf Me.cmbLoca.Value = "11" Then
+chkCompCar = -1
+chkDump = -1
+chkDump_afterupdate
+ElseIf Me.cmbLoca.Value = "14" Then
+chkCompCar = 0
+chkDump = -1
+chkDump_afterupdate
+End If
 End Sub
 
 
 Private Sub chkCompCar_afterupdate()
 
-Dim SQL As String
+Dim sql As String
 
-SQL = " select 車両台帳.登録,　車両台帳.番号,　車両台帳.初度登録,　車両台帳.型式,　車両台帳.車名,　車両台帳.車台番号,"
-SQL = SQL & " 車両台帳.種別,　車両台帳.最大積載量,　車両台帳.車両総重量,　車両台帳.Nox・PM法,　車両台帳.基準緩和事項,　車両台帳.場所, 車両台帳.社用車, 車両台帳.ダンプ"
-SQL = SQL & " from 車両台帳"
-SQL = SQL & " Where (((車両台帳.場所) = " & [Forms]![frm車両台帳]![cmbLoca] & ")"
- SQL = SQL & " and ((車両台帳.社用車) = " & [Forms]![frm車両台帳]![chkCompCar] & ")"
- SQL = SQL & " and ((車両台帳.ダンプ) = " & [Forms]![frm車両台帳]![chkDump] & "))"
-SQL = SQL & " order by 車両台帳.車台番号;"
-Me.lstDaicho.RowSource = SQL
+sql = " select 車両台帳.登録,　車両台帳.番号,　車両台帳.初度登録,　車両台帳.型式,　車両台帳.車名,　車両台帳.車台番号,"
+sql = sql & " 車両台帳.種別,　車両台帳.最大積載量,　車両台帳.車両総重量,　車両台帳.Nox・PM法,　車両台帳.基準緩和事項,　車両台帳.場所, 車両台帳.社用車, 車両台帳.ダンプ"
+sql = sql & " from 車両台帳"
+sql = sql & " Where (((車両台帳.場所) = " & [Forms]![frm車両台帳]![cmbLoca] & ")"
+ sql = sql & " and ((車両台帳.社用車) = " & [Forms]![frm車両台帳]![chkCompCar] & ")"
+ sql = sql & " and ((車両台帳.ダンプ) = " & [Forms]![frm車両台帳]![chkDump] & "))"
+sql = sql & " order by 車両台帳.番号;"
+Me.lstDaicho.RowSource = sql
 
 DoCmd.Requery "lstDaicho"
 
-SQL = " select count(車両台帳.登録) AS 登録番号の個数"
-SQL = SQL & " From 車両台帳"
-SQL = SQL & " Where (((車両台帳.場所) = " & [Forms]![frm車両台帳]![cmbLoca] & ")"
- SQL = SQL & " and ((車両台帳.社用車) = " & [Forms]![frm車両台帳]![chkCompCar] & ")"
- SQL = SQL & " and ((車両台帳.ダンプ) = " & [Forms]![frm車両台帳]![chkDump] & "))"
+sql = " select count(車両台帳.登録) AS 登録番号の個数"
+sql = sql & " From 車両台帳"
+sql = sql & " Where (((車両台帳.場所) = " & [Forms]![frm車両台帳]![cmbLoca] & ")"
+ sql = sql & " and ((車両台帳.社用車) = " & [Forms]![frm車両台帳]![chkCompCar] & ")"
+ sql = sql & " and ((車両台帳.ダンプ) = " & [Forms]![frm車両台帳]![chkDump] & "))"
  
  
  Dim ds As Database
  Dim rs As Recordset
  
  Set ds = CurrentDb
- Set rs = ds.OpenRecordset(SQL)
+ Set rs = ds.OpenRecordset(sql)
  
  Me.lblResultRecordCount.Caption = "(" & rs(0) & ")件検索"
 
@@ -80,31 +101,31 @@ End Sub
 
 Private Sub chkDump_afterupdate()
 
-Dim SQL As String
+Dim sql As String
 
-SQL = " select 車両台帳.登録,　車両台帳.番号,　車両台帳.初度登録,　車両台帳.型式,　車両台帳.車名,　車両台帳.車台番号,"
-SQL = SQL & " 車両台帳.種別,　車両台帳.最大積載量,　車両台帳.車両総重量,　車両台帳.Nox・PM法,　車両台帳.基準緩和事項,　車両台帳.場所, 車両台帳.社用車, 車両台帳.ダンプ"
-SQL = SQL & " from 車両台帳"
-SQL = SQL & " Where (((車両台帳.場所) = " & [Forms]![frm車両台帳]![cmbLoca] & ")"
- SQL = SQL & " and ((車両台帳.社用車) = " & [Forms]![frm車両台帳]![chkCompCar] & ")"
- SQL = SQL & " and ((車両台帳.ダンプ) = " & [Forms]![frm車両台帳]![chkDump] & "))"
-SQL = SQL & " order by 車両台帳.車台番号;"
-Me.lstDaicho.RowSource = SQL
+sql = " select 車両台帳.登録,　車両台帳.番号,　車両台帳.初度登録,　車両台帳.型式,　車両台帳.車名,　車両台帳.車台番号,"
+sql = sql & " 車両台帳.種別,　車両台帳.最大積載量,　車両台帳.車両総重量,　車両台帳.Nox・PM法,　車両台帳.基準緩和事項,　車両台帳.場所, 車両台帳.社用車, 車両台帳.ダンプ"
+sql = sql & " from 車両台帳"
+sql = sql & " Where (((車両台帳.場所) = " & [Forms]![frm車両台帳]![cmbLoca] & ")"
+ sql = sql & " and ((車両台帳.社用車) = " & [Forms]![frm車両台帳]![chkCompCar] & ")"
+ sql = sql & " and ((車両台帳.ダンプ) = " & [Forms]![frm車両台帳]![chkDump] & "))"
+sql = sql & " order by 車両台帳.番号;"
+Me.lstDaicho.RowSource = sql
 
 DoCmd.Requery "lstDaicho"
 
-SQL = " select count(車両台帳.登録) AS 登録番号の個数"
-SQL = SQL & " From 車両台帳"
-SQL = SQL & " Where (((車両台帳.場所) = " & [Forms]![frm車両台帳]![cmbLoca] & ")"
- SQL = SQL & " and ((車両台帳.社用車) = " & [Forms]![frm車両台帳]![chkCompCar] & ")"
- SQL = SQL & " and ((車両台帳.ダンプ) = " & [Forms]![frm車両台帳]![chkDump] & "))"
+sql = " select count(車両台帳.登録) AS 登録番号の個数"
+sql = sql & " From 車両台帳"
+sql = sql & " Where (((車両台帳.場所) = " & [Forms]![frm車両台帳]![cmbLoca] & ")"
+ sql = sql & " and ((車両台帳.社用車) = " & [Forms]![frm車両台帳]![chkCompCar] & ")"
+ sql = sql & " and ((車両台帳.ダンプ) = " & [Forms]![frm車両台帳]![chkDump] & "))"
  
  
  Dim ds As Database
  Dim rs As Recordset
  
  Set ds = CurrentDb
- Set rs = ds.OpenRecordset(SQL)
+ Set rs = ds.OpenRecordset(sql)
  
  Me.lblResultRecordCount.Caption = "(" & rs(0) & ")件検索"
  
@@ -125,36 +146,44 @@ End Sub
 
 Private Sub tbDaichoCarNum_afterupdate()
 
-Dim SQL As String
+Dim sql As String
 Dim ds As Database
 Dim rs As Recordset
 Dim rstC As DAO.Recordset
 
+Me.cmbLoca = "17"
+Me.chkCompCar = "0"
+Me.chkDump = "0"
 
-
-SQL = " select 車両台帳.登録,　車両台帳.番号,　車両台帳.初度登録,　車両台帳.型式,　車両台帳.車名,　車両台帳.車台番号,"
-SQL = SQL & " 車両台帳.種別,　車両台帳.最大積載量,　車両台帳.車両総重量,　車両台帳.Nox・PM法,　車両台帳.基準緩和事項,　車両台帳.場所, 車両台帳.社用車, 車両台帳.ダンプ"
-SQL = SQL & " from 車両台帳"
-SQL = SQL & " Where ((車両台帳.番号) = " & [Forms]![frm車両台帳]![tbDaichoCarNum] & ")"
-Me.lstDaicho.RowSource = SQL
+sql = " select 車両台帳.登録,　車両台帳.番号,　車両台帳.初度登録,　車両台帳.型式,　車両台帳.車名,　車両台帳.車台番号,"
+sql = sql & " 車両台帳.種別,　車両台帳.最大積載量,　車両台帳.車両総重量,　車両台帳.Nox・PM法,　車両台帳.基準緩和事項,　車両台帳.場所, 車両台帳.社用車, 車両台帳.ダンプ"
+sql = sql & " from 車両台帳"
+sql = sql & " Where ((車両台帳.番号) = " & [Forms]![frm車両台帳]![tbDaichoCarNum] & ")"
+sql = sql & " order by 車両台帳.番号;"
+Me.lstDaicho.RowSource = sql
 DoCmd.Requery "lstdaicho"
 
 On Error Resume Next
 If Not IsNull(tbDaichoCarNum) Then
-Set rstC = CurrentDb.OpenRecordset(SQL)
+Set rstC = CurrentDb.OpenRecordset(sql)
 If rstC!社用車.Value = -1 Then
 Me.chkCompCar.Value = -1
 Else
 Me.chkCompCar.Value = 0
 End If
+If rstC!ダンプ.Value = -1 Then
+Me.chkCompCar.Value = -1
+Else
+Me.chkCompCar.Value = 0
+End If
 
-SQL = " select count(車両台帳.登録) AS 登録番号の個数"
-SQL = SQL & " From 車両台帳"
-SQL = SQL & " Where ((車両台帳.番号) = " & [Forms]![frm車両台帳]![tbDaichoCarNum] & ")"
+sql = " select count(車両台帳.登録) AS 登録番号の個数"
+sql = sql & " From 車両台帳"
+sql = sql & " Where ((車両台帳.番号) = " & [Forms]![frm車両台帳]![tbDaichoCarNum] & ")"
 
  
  Set ds = CurrentDb
- Set rs = ds.OpenRecordset(SQL)
+ Set rs = ds.OpenRecordset(sql)
  
  Me.lblResultRecordCount.Caption = "(" & rs(0) & ")件検索"
  tbDaichoCarNum.SetFocus
@@ -167,9 +196,7 @@ Exit Sub
 tbDaichoCarNum.SetFocus
 End If
 
-Me.cmbLoca = "17"
-Me.chkDump = "0"
-Me.chkCompCar = "0"
+
 
 tbDaichoCarNum.SetFocus
 End Sub

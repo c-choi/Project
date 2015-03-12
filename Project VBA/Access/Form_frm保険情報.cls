@@ -14,14 +14,14 @@ Attribute VB_Exposed = False
 Private Sub cmddel_Click()
 On Error GoTo cmddel_click_err
 
-    If IsNull(Me.tbBodyNum) Or IsNull(Me.tbInsuNum) Then
+    If IsNull(Me.tbbodyNum) Or IsNull(Me.tbInsuNum) Then
     MsgBox "削除する情報を選べてください。"
     Exit Sub
     End If
     
     Dim sql, msg, style, title, help, ctxt, response, message, default, myvalue
     
-    msg = Me.tbBodyNum & "の保険情報を削除しますか？"
+    msg = Me.tbbodyNum & "の保険情報を削除しますか？"
     style = vbYesNo + vbCritical + vbDefaultButton1
     title = "削除"
     
@@ -35,7 +35,7 @@ On Error GoTo cmddel_click_err
     rs.CursorType = adOpenDynamic
     rs.LockType = adLockOptimistic
     
-    rs.Open "select * from [車両保険] where [id] = '" & Me.tbBodyNum & "'"
+    rs.Open "select * from [車両保険] where [id] = '" & Me.tbbodyNum & "'"
     
     Do Until rs.EOF
      
@@ -45,7 +45,7 @@ On Error GoTo cmddel_click_err
     
     Set rs = Nothing
     
-    MsgBox Me.tbBodyNum & "の保険情報を削除しました。"
+    MsgBox Me.tbbodyNum & "の保険情報を削除しました。"
     DoCmd.Requery "lstInsurance"
     
 Else
@@ -199,7 +199,7 @@ Public bodynum As Variant
 
 Private Sub cmdDetail_Click()
 On Error GoTo cmdDetail_Click_Err
-bodynum = [Forms]![frm基本情報]![tbBodyNum]
+bodynum = [Forms]![frm基本情報]![tbbodyNum]
     DoCmd.OpenForm "frm一覧情報", acNormal, , , acEdit, acDialog
 
 cmdDetail_Click_Exit:
